@@ -96,10 +96,10 @@ public class GNRTCh1P3 extends OpMode {
         }
 
         // Calculates acceleration multiplier based on time difference
-        accelerationMultiplier = (double) timeDiff / 3;
+        accelerationMultiplier = (double) timeDiff / 2;
 
         // If joystick is not being moved, reset motors and parameters
-        if(LStickY == 0){
+        if(LStickY == 0 && LStickX == 0){
             rightMotor.setPower(0.00);
             leftMotor.setPower(0.00);
             accelerationMultiplier = 0;
