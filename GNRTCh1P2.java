@@ -35,7 +35,7 @@ public class GNRTCh1P2 extends OpMode {
 
         // Retrieve joystick values for driving control
         double leftStickX = -gamepad1.left_stick_x; // Negative for reversing direction
-        double leftStickY = gamepad1.left_stick_y;
+        double leftStickY = -gamepad1.left_stick_y;
 
         // Keep the joystick values only if they are greater the previously set dead zone
         leftStickX = Math.abs(leftStickX) > ANALOG_STICK_DEAD_ZONE ? leftStickX : 0;
