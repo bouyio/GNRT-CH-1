@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 //TODO: Add stick dead zone
 
 @TeleOp()
-public class GNRTCh1 extends OpMode {
+public class GNRTCh1P1 extends OpMode {
 
     DcMotor doorMotor; // Hex motor for controlling the door mechanism
 
