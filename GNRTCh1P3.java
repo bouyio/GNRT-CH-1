@@ -110,7 +110,7 @@ public class GNRTCh1P3 extends OpMode {
         }
 
         // Apply the acceleration to motors
-        rightMotor.setPower((LStickY * accelerationMultiplier) + LStickX);
-        leftMotor.setPower((LStickY * accelerationMultiplier) - LStickX);
+        rightMotor.setPower(-(LStickY * accelerationMultiplier) + LStickX);
+        leftMotor.setPower(-(LStickY * accelerationMultiplier) - LStickX);
     }
 }
