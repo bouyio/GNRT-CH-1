@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
@@ -10,6 +11,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class GNRTCh1 extends OpMode {
 
     DcMotor doorMotor; // Hex motor for controlling the door mechanism
+
+    // TODO: Measure the optimal dead zone
+    private final double ANALOG_STICK_DEAD_ZONE = 0.15;
 
     private final int ENCODER_COUNT_PER_REVOLUTION = 288; // Encoder counts per revolution for door motor
 
@@ -35,9 +39,15 @@ public class GNRTCh1 extends OpMode {
         // Retrieve joystick values for driving control
         double leftStickX = -gamepad1.left_stick_x; // Negative for reversing direction
         double leftStickY = gamepad1.left_stick_y;
+        double rightStickY = gamepad1.right_stick_y;
+
+        // Keep the joystick values only if they are greater the previously set dead zone
+        leftStickX = Math.abs(leftStickX) > ANALOG_STICK_DEAD_ZONE ? leftStickX : 0;
+        leftStickY = Math.abs(leftStickY) > ANALOG_STICK_DEAD_ZONE ? leftStickY : 0;
+        rightStickY = Math.abs(rightStickY) > ANALOG_STICK_DEAD_ZONE ? rightStickY : 0;
 
         // Limit motor power to a range between -0.7 and 0.7 for smoother control
-        double motorPowerY = ueInRangeOf(-0.7, 0.7, leftStickY);
+        double motorPowerY = keepValueInRangeOf(-0.7, 0.7, leftStickY);
         double motorPowerX = keepValueInRangeOf(-0.7, 0.7, leftStickX);
 
         // Set motor power for left and right motors to achieve desired movement
@@ -58,7 +68,7 @@ public class GNRTCh1 extends OpMode {
 
         // Allow manual control of door motor using right joystick if left bumper is pressed
         if (gamepad1.left_bumper) {
-            doorMotor.setPower(gamepad1.right_stick_y);
+            doorMotor.setPower(rightStickY);
         }
     }
 
