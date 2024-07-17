@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-//TODO: Add stick dead zone
 
 @TeleOp()
 public class GNRTCh1P2 extends OpMode {
@@ -29,8 +28,6 @@ public class GNRTCh1P2 extends OpMode {
         // Initialize door motor from the hardware map
         intakeMotor = hardwareMap.get(DcMotor.class, "intake_motor");
 
-        // Reset encoder for door motor to start from a known position
-        intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     @Override
@@ -57,7 +54,7 @@ public class GNRTCh1P2 extends OpMode {
         }
 
         if(intakeToggle){
-            intakeMotor.setPower(0.7);
+            intakeMotor.setPower(-1);
         } else {
             intakeMotor.setPower(0);
         }
