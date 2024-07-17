@@ -10,11 +10,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @TeleOp()
 public class GNRTCh1P3 extends OpMode {
 
-    private double accelerationMultiplier;
-    private double timeDiff;
-    private boolean isTimeDiffSet = false;
-    private boolean isStartingAccelerationTimeSet = false;
-    private double startingAccelerationTime;
+    private double accelerationMultiplier; // variable that stores the acceleartion multiplier 
+    private double timeDiff; // variable that stores the time difference the starting acceleration time and the current time
+    private boolean isTimeDiffSet = false; // Flag to check if time difference is set
+    private boolean isStartingAccelerationTimeSet = false; // Flag to check if starting acceleration time is set
+    private double startingAccelerationTime; // variable that stores the starting acceleration time
 
     boolean intakeToggle = false;
     DcMotor intakeMotor; // Hex motor for controlling the door mechanism
@@ -22,7 +22,7 @@ public class GNRTCh1P3 extends OpMode {
     // TODO: Measure the optimal dead zone
     private final double ANALOG_STICK_DEAD_ZONE = 0.15;
 
-    DcMotor leftMotor; // Motor for left side drive
+    DcMotor leftMotor; // Motor for left side drive 
     DcMotor rightMotor; // Motor for right side drive
 
     @Override
@@ -52,20 +52,23 @@ public class GNRTCh1P3 extends OpMode {
         double motorPowerY = keepValueInRangeOf(-0.7, 0.7, leftStickY);
         double motorPowerX = keepValueInRangeOf(-0.7, 0.7, leftStickX);
 
+        // turbo mode
         if(gamepad1.left_bumper) {
             leftMotor.setPower(motorPowerY - motorPowerX);
             rightMotor.setPower(motorPowerY + motorPowerX);
         } else {
-            accelerate(motorPowerY, motorPowerX);
+            accelerate(motorPowerY, motorPowerX); // accelerate smoothly
         }
+
+        // when button is pressed change the value of intake toggle 
         if (gamepad1.a){
             intakeToggle = !intakeToggle;
         }
 
         if(intakeToggle){
-            intakeMotor.setPower(-1);
+            intakeMotor.setPower(-1); // when "a" button is pressed when intakeToggle = true, start the intake motor 
         } else {
-            intakeMotor.setPower(0);
+            intakeMotor.setPower(0); // when "a" button is pressed when intakeToggle = false, stop the intake motor
         }
     }
 
@@ -78,23 +81,24 @@ public class GNRTCh1P3 extends OpMode {
         }
     }
 
-
+    // method for smooth acceleration
     private void accelerate(double LStickY, double LStickX){
         if(!isStartingAccelerationTimeSet){
-            startingAccelerationTime = (double) ElapsedTime.SECOND_IN_NANO / 1000000000;
+            startingAccelerationTime = (double) ElapsedTime.SECOND_IN_NANO / 1000000000; // calculates starting acceleration time
             isStartingAccelerationTimeSet = true;
         }
 
         if(!isTimeDiffSet){
-            timeDiff = (double) ElapsedTime.MILLIS_IN_NANO / 1000000000 - startingAccelerationTime;
+            timeDiff = (double) ElapsedTime.MILLIS_IN_NANO / 1000000000 - startingAccelerationTime; // calculates time difference 
             if(timeDiff >= 2){
                 isTimeDiffSet = true;
             }
         }
 
-
+        // Calculates acceleration multiplier based on time difference
         accelerationMultiplier = (double) timeDiff / 3;
 
+        // If joystick is not being moved, reset motors and parameters
         if(LStickY == 0){
             rightMotor.setPower(0.00);
             leftMotor.setPower(0.00);
@@ -105,6 +109,7 @@ public class GNRTCh1P3 extends OpMode {
             return;
         }
 
+        // Apply the acceleration to motors
         rightMotor.setPower((LStickY * accelerationMultiplier) + LStickX);
         leftMotor.setPower((LStickY * accelerationMultiplier) - LStickX);
     }
